@@ -40,6 +40,7 @@ droite = (1, 0)
 
 # Charger les fichiers audios
 son_jeu = pygame.mixer.Sound(os.path.join('sounds/eva_op.mp3'))
+son_jeu.set_volume(0.1)
 
 
 # Fonction pour démarrer le jeu

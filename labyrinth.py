@@ -2,6 +2,7 @@ import pygame, sys
 from pygame.locals import QUIT
 
 pygame.init()
+pygame.mixer.init()
 
 largeur, hauteur = 400 , 400
 fenetre = pygame.display.set_mode((largeur, hauteur))
@@ -52,9 +53,13 @@ font = pygame.font.Font("fonts/crazy_Writerz.ttf", 36)
 arrivee_x = largeur - cellule // 2
 arrivee_y = hauteur - cellule // 2
 
+music = pygame.mixer.Sound('sounds/music_labyrinth.mp3')
+music.set_volume(0.1)
+music.play()
+
 
 while True:
-    print(joueur_position_x // 40, joueur_position_y // 40)
+    # print(joueur_position_x // 40, joueur_position_y // 40)
     for event in pygame.event.get():
         # On oublie pas de mettre la condition de sortie
         if event.type == QUIT:
@@ -88,16 +93,20 @@ while True:
         # Mettre à jour l'affichage pour voir le texte
         pygame.display.update()
         # Attendre (2 secondes) avant de fermer le jeu pour que le joueur puisse voir le game over
-        pygame.time.wait(2000)
+        pygame.time.wait(4000)
         # On ferme comme quand on appuie sur la croix
         pygame.quit()
         sys.exit()
 
 
     # Exactement de la même manière que pour la défaite lorsqu'on touche un mur
-    # la victoire lorsqu'on touche l'objectif
+    # la victoire lorsqu'on touche l'objectif mais aussi un timer
     if joueur_position_x - arrivee_x > -40 and joueur_position_y - arrivee_y > -40:
-        victoire_text = font.render("VICTOIRE", True, couleur_joueur)
+        # Calculer le temps final
+        secondes_passees = pygame.time.get_ticks() // 1000
+        minutes = secondes_passees // 60
+        secondes = secondes_passees % 60
+        victoire_text = font.render(f"Bravo ! Tu as gagné en {minutes:02}:{secondes:02} !", True, couleur_joueur)
         fenetre.blit(victoire_text, (largeur // 2 - victoire_text.get_width() // 2, hauteur // 2 - victoire_text.get_height() // 2))
         pygame.display.update()
         pygame.time.wait(2000)      
@@ -105,6 +114,13 @@ while True:
         sys.exit()
 
     fenetre.fill(couleur_fenetre)
+
+    # Calculer et afficher le timer
+    secondes_passees = pygame.time.get_ticks() // 1000
+    minutes = secondes_passees // 60
+    secondes = secondes_passees % 60
+    timer_texte = font.render(f"{minutes:02}:{secondes:02}", True, couleur_joueur)
+    fenetre.blit(timer_texte, (largeur // 2 - timer_texte.get_width() // 2, 0))
 
     # Dessiner les murs (en les aggrandissant avec la taille des cellules)
     for mur in murs:
