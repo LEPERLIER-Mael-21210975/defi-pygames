@@ -59,7 +59,7 @@ music.play()
 
 
 while True:
-    # print(joueur_position_x // 40, joueur_position_y // 40)
+    print(joueur_position_x // 40, joueur_position_y // 40)
     for event in pygame.event.get():
         # On oublie pas de mettre la condition de sortie
         if event.type == QUIT:
